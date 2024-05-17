@@ -11,6 +11,8 @@ pipelines:
         shallow_clone: true
         auto_update: true
         branch: main
+    secure_variables:
+      SSH_PASSWORD: "AES:GJpOsKchZolqf2Gylrqymw==:48C77QmHmE7ihFUNFmoXRw=="
     stages:
     - DEV:
         fetch_materials: true
@@ -27,7 +29,7 @@ pipelines:
                 - -e
                 - ansible_user=ec2-user
                 - -e
-                - ansible_password=DevOps321
+                - ansible_password=${SSH_PASSWORD}
                 - -e
                 - env=dev
                 - -e
