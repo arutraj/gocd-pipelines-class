@@ -11,24 +11,24 @@ pipelines:
         shallow_clone: true
         auto_update: true
         branch: main
+    secure_variables:
+      SSH_PASSWORD: "AES:GJpOsKchZolqf2Gylrqymw==:48C77QmHmE7ihFUNFmoXRw=="
+      vault_token: "AES:Ro4nPk9BFkts9PbZ7hR+TQ==:3orYTpuPUkzlbp868dzSkAmVr6hMmCztFWPZx/CwdL8="
     stages:
     - DEV:
         fetch_materials: true
-        environment_variables: { env: dev }
+        environment_variables: { env: dev, action: destroy }
         approval: {type: manual}
         jobs:
           terraform:
             tasks:
-            - exec: { command: terraform , arguments: [ "init", "-backend-config", "env-dev/state.tfvars"] }
-            - exec: { command: terraform , arguments: [ "destroy", "-var-file", "env-dev/main.tfvars", "-auto-approve"] }
-
+            - exec: { command: bash , arguments: [ "run.sh"] }
 
     - PROD:
         fetch_materials: true
-        environment_variables: { env: dev }
+        environment_variables: { env: prod, action: destroy }
         jobs:
           terraform:
             tasks:
-            - exec: { command: terraform , arguments: [ "init", "-backend-config", "env-dev/state.tfvars"] }
-            - exec: { command: terraform , arguments: [ "destroy", "-var-file", "env-dev/main.tfvars", "-auto-approve"] }
+            - exec: { command: bash , arguments: [ "run.sh"] }
 
